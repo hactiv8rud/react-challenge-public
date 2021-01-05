@@ -23,12 +23,8 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    let url = '';
-    if (this.state.searchKey === '') {
-      url = `https://api.themoviedb.org/3/trending/movie/day?api_key=90d4a0880579cc5fa24ef5de07760fd3&page=${this.state.page}`
-    } else {
-      url = `https://api.themoviedb.org/3/search/movie?api_key=90d4a0880579cc5fa24ef5de07760fd3&language=en-US&query=${this.state.searchKey.toLowerCase()}&page=${this.state.page}&include_adult=false`
-    }
+    this.setState({searchKey: ''})
+    const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=90d4a0880579cc5fa24ef5de07760fd3&page=${this.state.page}`;
     fetch(url)
       .then(res => res.json())
       .then(
@@ -37,7 +33,7 @@ class Home extends React.Component {
             isLoaded: true,
             movies: result.results,
             total_pages: result.total_pages,
-            total_results: result.total_results
+            total_results: result.total_results,
           });
         },
         (error) => {
@@ -47,6 +43,36 @@ class Home extends React.Component {
           });
         }
       )
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.searchKey !== prevState.searchKey) {
+      let url = '';
+      if (this.state.searchKey === '') {
+        url = `https://api.themoviedb.org/3/trending/movie/day?api_key=90d4a0880579cc5fa24ef5de07760fd3&page=${this.state.page}`;
+      } else {
+          url = `https://api.themoviedb.org/3/search/movie?api_key=90d4a0880579cc5fa24ef5de07760fd3&language=en-US&query=${this.state.searchKey.toLowerCase()}&page=${this.state.page}&include_adult=false`;
+      }
+    
+      fetch(url)
+        .then(res => res.json())
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              movies: result.results,
+              total_pages: result.total_pages,
+              total_results: result.total_results
+            });
+          },
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        )
+    }
   }
 
   render() {

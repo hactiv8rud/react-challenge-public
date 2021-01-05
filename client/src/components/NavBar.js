@@ -11,13 +11,21 @@ class NavBar extends React.Component {
   }
 
   handleInputChange(event) {
-    console.log('hit')
-    this.props.setSearchKey(event.target.value)
+    console.log('navbar')
+    this.setState({ searchKey: event.target.value });
+    this.props.setSearchKey(event.target.value);
   }
 
   goHome(event) {
     event.preventDefault();
   }
+
+  // componentDidUpdate(prevState) {
+  //   if (this.state.searchKey !== prevState.searchKey) {
+  //     this.props.setSearchKey(this.state.searchKey);
+  //     console.log(this.state.searchKey);
+  //   }
+  // }
 
   render() {
     return(
