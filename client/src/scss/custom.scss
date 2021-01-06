@@ -276,3 +276,20 @@ input[type=text], input[type=email], input[type=password], input[type=date], inp
 .main-page {
   overflow: hidden;
 }
+
+.card {
+  min-width: 15rem;
+ }
+
+.justify-center {
+  padding: 1rem 1rem;
+  // padding-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  // height: 82vh;
+  overflow-y: auto;
+}
+
+.spinner {
+  margin-top: 7rem;
+}

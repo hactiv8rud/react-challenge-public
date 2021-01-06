@@ -1,97 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import useFetch from '../hooks/useFetch';
 import NavBar from '../components/NavBar';
 import MovieCard from '../components/MovieCard';
+import Spinner from '../components/Spinner';
+import NoResult from '../components/NoResult';
+import Error from '../components/Error';
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchKey: '',
-      page: 1,
-      total_pages: 0,
-      total_results: 0,
-      movies: [],
-      isLoaded: false,
-      error: null
-    };
-    this.setSearchKey = this.setSearchKey.bind(this);
+function Home() {
+  const [searchKey, setSearchKey] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  let url = '';
+  if (searchKey === '') {
+    url = `https://api.themoviedb.org/3/trending/movie/day?api_key=90d4a0880579cc5fa24ef5de07760fd3&page=${currentPage}`;
+  } else {
+      url = `https://api.themoviedb.org/3/search/movie?api_key=90d4a0880579cc5fa24ef5de07760fd3&language=en-US&query=${searchKey.toLowerCase()}&page=${currentPage}&include_adult=false`;
   }
+  const { data: movies, setData, isLoaded, error, totalPages, totalResults } = useFetch(url, [searchKey, currentPage]);
 
-
-  setSearchKey(query) {
-    this.setState({ searchKey: query });
+  if (isLoaded) {
+    return <Spinner />
   }
-
-  componentDidMount() {
-    this.setState({searchKey: ''})
-    const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=90d4a0880579cc5fa24ef5de07760fd3&page=${this.state.page}`;
-    fetch(url)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            movies: result.results,
-            total_pages: result.total_pages,
-            total_results: result.total_results,
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
+  
+  return (
+    <>
+      <div className="main-page">
+        <NavBar setSearchKey={setSearchKey} />
+        {(error) && (<Error error={error} />)}
+        {
+          (!movies.length && !error) ? (
+            <NoResult />
+          ) : (
+            <div className="layout-center row row-cols-1 row-cols-md-4 g-4 ml-2 mr-2">
+              {
+                movies.map((movie) => {
+                  return <MovieCard movie={movie} key={movie.id} />
+                })
+              }
+            </div>
+          )
         }
-      )
-  }
+      </div>
+    </>
+  );
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.searchKey !== prevState.searchKey) {
-      let url = '';
-      if (this.state.searchKey === '') {
-        url = `https://api.themoviedb.org/3/trending/movie/day?api_key=90d4a0880579cc5fa24ef5de07760fd3&page=${this.state.page}`;
-      } else {
-          url = `https://api.themoviedb.org/3/search/movie?api_key=90d4a0880579cc5fa24ef5de07760fd3&language=en-US&query=${this.state.searchKey.toLowerCase()}&page=${this.state.page}&include_adult=false`;
-      }
-    
-      fetch(url)
-        .then(res => res.json())
-        .then(
-          (result) => {
-            this.setState({
-              isLoaded: true,
-              movies: result.results,
-              total_pages: result.total_pages,
-              total_results: result.total_results
-            });
-          },
-          (error) => {
-            this.setState({
-              isLoaded: true,
-              error
-            });
-          }
-        )
-    }
-  }
-
-  render() {
-    return (
-      <>
-        <div className="main-page">
-          <NavBar setSearchKey={this.setSearchKey} />
-          <div className="layout-center row row-cols-1 row-cols-md-4 g-4 ml-2 mr-2">
-          {
-            this.state.movies.map((movie) => {
-              return <MovieCard movie={movie} key={movie.id} />
-            })
-          }
-          </div>
-        </div>
-        
-      </>
-    );
-  }
 }
 
 export default Home;
