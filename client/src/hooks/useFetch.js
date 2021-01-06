@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 function useFetch(url, arrDependencies) {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(true);
   const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalResults, setTotalResults] = useState(0);
+  const [totalPages, setTotalPages] = useState(null);
+  const [totalResults, setTotalResults] = useState(null);
 
   function handleResponse (response) {
     let contentType = response.headers.get('content-type')
@@ -51,9 +51,17 @@ function useFetch(url, arrDependencies) {
     fetch(url)
       .then(handleResponse)
       .then((data) => {
-        setData(data.results);
-        setTotalPages(data.total_pages);
-        setTotalResults(data.total_results);
+        if (data.results) {
+          setData(data.results);
+        } else {
+          setData(data)
+        }
+        if(data.total_pages) {
+          setTotalPages(data.total_pages);
+        }
+        if(data.total_results) {
+          setTotalResults(data.total_results);
+        }
       })
       .catch((error) => {
         setError(error);

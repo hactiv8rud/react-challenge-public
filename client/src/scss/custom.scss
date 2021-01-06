@@ -8,6 +8,10 @@ $navbar-light-color:  black;
   font-weight: 400;
 }
 
+.brand-name {
+  color: black;
+}
+
 .btn, .btn-sm {
   font-weight: 500;
 }
@@ -293,3 +297,16 @@ input[type=text], input[type=email], input[type=password], input[type=date], inp
 .spinner {
   margin-top: 7rem;
 }
+
+.home-movie-title {
+  text-decoration: none;
+  color: black;
+}
+
+.home-movie-detail-link:hover {
+  text-decoration: none;
+}
+
+// .detail-movie-image {
+//   max-width: 12rem;
+// }
