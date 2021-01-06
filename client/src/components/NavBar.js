@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchKey } from '../store/actions';
 import { NavLink } from 'react-router-dom';
 import useDebounce from '../hooks/useDebounce';
 
 function NavBar(props) {
-  const [searchKey, setSearchKey] = useState('');
-  const debouncedValue = useDebounce(searchKey, 800)
+  const [searchKeyNavBar, setSearchKeyNavBar] = useState('');
+  const searchKey = useSelector(state => state.searchKey);
+  const dispatch = useDispatch();
+  const debouncedValue = useDebounce(searchKeyNavBar, 500)
 
   function handleInputChange(event) {
-    setSearchKey(event.target.value);
+    setSearchKeyNavBar(event.target.value);
   }
 
   useEffect(() => {
-    props.setSearchKey(debouncedValue);
+    dispatch(setSearchKey(debouncedValue));
   }, [debouncedValue]);
 
   return(
@@ -40,7 +44,7 @@ function NavBar(props) {
             </li>
           </ul>
           <form className="form-inline my-2 my-lg-0">
-            <input className="form-control mr-sm-2" name="searchKey" value={searchKey} onChange={handleInputChange} type="search" placeholder="Search by Title" />
+            <input className="form-control mr-sm-2" name="searchKey" value={searchKeyNavBar} onChange={handleInputChange} type="search" placeholder="Search by Title" />
           </form>
         </div>
       </nav>

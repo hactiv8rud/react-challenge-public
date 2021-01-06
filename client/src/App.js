@@ -4,11 +4,10 @@ import { Home, MovieDetail, Favorite } from './pages';
 import NavBar from './components/NavBar'
 
 function App() {
-  const [searchKey, setSearchKey] = useState('');
   return (
     <>
       <div className="main-page">
-        <NavBar setSearchKey={setSearchKey} />
+        <NavBar />
         <Switch>
           <Route path="/favorites">
             <Favorite></Favorite>
@@ -17,7 +16,7 @@ function App() {
             <MovieDetail></MovieDetail>
           </Route>
           <Route path="/">
-            <Home searchKey={searchKey}></Home>
+            <Home></Home>
           </Route>
         </Switch>
       </div>

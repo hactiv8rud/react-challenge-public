@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFavorites } from '../store/actions';
 
-function useFetch(url, arrDependencies) {
+function useFetchFavorites(url, arrDependencies) {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(null);
-  const [totalResults, setTotalResults] = useState(null);
+  const favoriteIds = useSelector(state => state.favoriteIds);
+  const dispatch = useDispatch();
 
   function handleResponse (response) {
     let contentType = response.headers.get('content-type')
@@ -51,41 +53,19 @@ function useFetch(url, arrDependencies) {
     fetch(url)
       .then(handleResponse)
       .then((data) => {
-        if (data.results) {
-          setData(data.results);
-        } else {
-          setData(data);
-        }
-        if(data.total_pages) {
-          setTotalPages(data.total_pages);
-        }
-        if(data.total_results) {
-          setTotalResults(data.total_results);
-        }
+        const favorites = data.results.filter((movie) => {
+          return (favoriteIds.includes(movie.id))
+        });
+        setData(favorites);
+        dispatch(setFavorites(favorites));
       })
       .catch((error) => {
         setError(error);
       })
       .finally(_ => setIsLoaded(true))
   }, arrDependencies)
-  
-  // useEffect(() => {
-  //   fetch(url)
-  //     .then(res => res.json())
-  //     .then(
-  //       (result) => {
-  //         setData(result.results);
-  //         setIsLoaded(true);
-  //         setTotalPages(result.total_pages);
-  //         setTotalResults(result.total_results);
-  //       },
-  //       (error) => {
-  //         setIsLoaded(true);
-  //         setError(error);
-  //       }
-  //     )
-  // }, arrDependencies)
-  return { data, setData, isLoaded, error, totalPages, totalResults }
+
+  return { data, setData, isLoaded, error }
 }
 
-export default useFetch;
+export default useFetchFavorites;
