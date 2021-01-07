@@ -4,8 +4,6 @@ import formatUSD from '../helpers/formatUSD';
 import Spinner from '../components/Spinner';
 
 function MovieDetailList(props) {
-
-  console.log(props)
   if(Object.keys(props.movie).length && props.movie.constructor === Object) {
     return (
       <>
