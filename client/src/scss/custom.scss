@@ -307,6 +307,14 @@ input[type=text], input[type=email], input[type=password], input[type=date], inp
   text-decoration: none;
 }
 
+.home-movie-title-container {
+  padding: 0rem 0.5rem 1rem 0.5rem;  
+}
+
 .active {
-  color: #41B883;
+  border-bottom: solid orange 0.2rem;
+}
+
+.wishlist-icon {
+  cursor:pointer;
 }

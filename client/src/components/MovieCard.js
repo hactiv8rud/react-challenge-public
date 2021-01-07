@@ -69,7 +69,7 @@ function MovieCard(props) {
                 <img onClick={addFavorite} src="/images/empty-star.svg" className="wishlist-icon" />
               )
             }
-            <div className="card-body d-flex flex-column text-center">
+            <div className="card-body d-flex flex-column text-center home-movie-title-container">
               <h5 className="card-title mb-0 home-movie-title">{props.movie.original_title}</h5>
               {/* <a href="" onClick={goDetails} className="btn btn-success">See Details</a> */}
             </div>

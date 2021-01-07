@@ -25,3 +25,10 @@ export function setFilteredFavorites(payload) {
     payload
   }
 }
+
+export function setPath(payload) {
+  return {
+    type: "path/setPath",
+    payload
+  }
+}

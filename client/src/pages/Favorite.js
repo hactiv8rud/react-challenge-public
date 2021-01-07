@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilteredFavorites } from '../store/actions';
-
+import { useRouteMatch } from 'react-router-dom';
+import { setPath } from '../store/actions';
 import MovieCard from '../components/MovieCard';
 import Spinner from '../components/Spinner';
 import NoItem from '../components/NoItem';
 import Error from '../components/Error';
 
 function Favorite() {
-
+  const { path } = useRouteMatch();
   const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=90d4a0880579cc5fa24ef5de07760fd3&page=1`;
   const filteredFavorites = useSelector(state => state.filteredFavorites);
   const searchKey = useSelector(state => state.searchKey);
@@ -80,6 +81,9 @@ function Favorite() {
 
   }, [favoriteIds, searchKey])
 
+  useEffect(() => {
+    dispatch(setPath(path));
+  },[])
 
   if (!isLoaded) {
     return <Spinner />

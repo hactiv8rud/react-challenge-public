@@ -3,7 +3,8 @@ const { createStore } = require('redux');
 const initialState = {
   favoriteIds: [],
   searchKey: '',
-  filteredfavorites: []
+  filteredfavorites: [],
+  path: ''
 }
 
 function reducer( state = initialState, action ) {
@@ -21,6 +22,8 @@ function reducer( state = initialState, action ) {
       return { ...state, filteredFavorites: action.payload }
     case 'searchKey/setSearchKey':
       return { ...state, searchKey: action.payload }
+    case 'path/setPath':
+      return { ...state, path: action.payload }
     default:
       return state
   }

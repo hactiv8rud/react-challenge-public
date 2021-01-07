@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchKey } from '../store/actions';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useRouteMatch } from 'react-router-dom';
 import useDebounce from '../hooks/useDebounce';
 
-function NavBar(props) {
+function NavBar() {
   const [searchKeyNavBar, setSearchKeyNavBar] = useState('');
   const searchKey = useSelector(state => state.searchKey);
+  const path = useSelector(state => state.path);
   const dispatch = useDispatch();
-  const debouncedValue = useDebounce(searchKeyNavBar, 500)
+  const debouncedValue = useDebounce(searchKeyNavBar, 500);
 
   function handleInputChange(event) {
     setSearchKeyNavBar(event.target.value);
@@ -17,6 +18,10 @@ function NavBar(props) {
   useEffect(() => {
     dispatch(setSearchKey(debouncedValue));
   }, [debouncedValue]);
+
+  useEffect(() => {
+    console.log(path);
+  }, []);
 
   return(
     <>
@@ -31,21 +36,23 @@ function NavBar(props) {
         <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
             <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center" exact to="/">
+              <NavLink className="nav-link d-flex align-items-center" activeClassName="active" exact to="/">
                 <img src="/images/home.svg" width="30" height="30" className="d-inline-block align-top" alt="movie-app logo" loading="lazy" />
                 Home
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center" exact to="/favorites">
+              <NavLink className="nav-link d-flex align-items-center" activeClassName="active" exact to="/favorites">
                 <img src="/images/star.svg" width="30" height="30" className="d-inline-block align-top" alt="movie-app logo" loading="lazy" />
                 Favorites
               </NavLink>
             </li>
           </ul>
-          <form className="form-inline my-2 my-lg-0">
-            <input className="form-control mr-sm-2" name="searchKey" value={searchKeyNavBar} onChange={handleInputChange} type="search" placeholder="Search by Title" />
-          </form>
+          { (path === "/favorites" || path === "/") && (
+            <form className="form-inline my-2 my-lg-0">
+              <input className="form-control mr-sm-2" name="searchKey" value={searchKeyNavBar} onChange={handleInputChange} type="search" placeholder="Search by Title" />
+            </form>
+            )}
         </div>
       </nav>
     </>
