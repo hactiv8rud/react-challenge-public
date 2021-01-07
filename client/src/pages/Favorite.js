@@ -14,20 +14,13 @@ function Favorite() {
   const filteredFavorites = useSelector(state => state.favoriteReducer.filteredFavorites);
   const filteredFavoriteIsLoaded = useSelector(state => state.favoriteReducer.filteredFavoriteIsLoaded);
   const filteredFavoriteError = useSelector(state => state.favoriteReducer.filteredFavoriteError);
-  const favorites = useSelector(state => state.favoriteReducer.favorites);
-  const favoriteIsLoaded = useSelector(state => state.favoriteReducer.favoriteIsLoaded);
-  const favoriteError = useSelector(state => state.favoriteReducer.favoriteError);
   const searchKey = useSelector(state => state.navbarReducer.searchKey);
   const favoriteIds = useSelector(state => state.favoriteReducer.favoriteIds);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchFavorites(url));
-  }, [favoriteIds, searchKey])
-
-  useEffect(() => {
     dispatch(fetchFilteredFavorites(url));
-  }, [searchKey])
+  }, [favoriteIds, searchKey])
 
   useEffect(() => {
     dispatch(setPath(path));
