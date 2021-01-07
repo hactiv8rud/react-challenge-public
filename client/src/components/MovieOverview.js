@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React from 'react';
 import Spinner from '../components/Spinner';
 
 function MovieOverview(props) {

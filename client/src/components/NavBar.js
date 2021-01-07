@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSearchKey } from '../store/actions';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { setSearchKey } from '../store/actions/navbarAction';
+import { NavLink } from 'react-router-dom';
 import useDebounce from '../hooks/useDebounce';
 
 function NavBar() {
   const [searchKeyNavBar, setSearchKeyNavBar] = useState('');
-  const searchKey = useSelector(state => state.searchKey);
-  const path = useSelector(state => state.path);
+  const searchKey = useSelector(state => state.navbarReducer.searchKey);
+  const path = useSelector(state => state.pathReducer.path);
   const dispatch = useDispatch();
   const debouncedValue = useDebounce(searchKeyNavBar, 500);
 
@@ -18,10 +18,6 @@ function NavBar() {
   useEffect(() => {
     dispatch(setSearchKey(debouncedValue));
   }, [debouncedValue]);
-
-  useEffect(() => {
-    console.log(path);
-  }, []);
 
   return(
     <>

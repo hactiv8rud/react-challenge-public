@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Spinner from '../components/Spinner';
 
 function MovieImage(props) {
   const imageUrl = `http://image.tmdb.org/t/p/w342${props.movie.poster_path}`
+  console.log(props)
 
   if(Object.keys(props.movie).length && props.movie.constructor === Object) {
     return (

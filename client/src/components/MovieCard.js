@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { addFavoriteId, deleteFavoriteId } from '../store/actions';
+import { addFavoriteId, deleteFavoriteId } from '../store/actions/favoriteAction';
 import Swal from 'sweetalert2';
 
 function MovieCard(props) {
   const [image_url] = useState(`http://image.tmdb.org/t/p/w342${props.movie.poster_path}`);
   const [MovieId] = useState(props.movie.id);
-  const favoriteIds = useSelector(state => state.favoriteIds);
+  const favoriteIds = useSelector(state => state.favoriteReducer.favoriteIds);
   const dispatch = useDispatch()
 
   function deleteFavorite() {
@@ -31,7 +31,7 @@ function MovieCard(props) {
 
   function addFavorite() {
     if (!favoriteIds.includes(props.movie.id)) {
-      dispatch(addFavoriteId(props.movie.id))
+      dispatch(addFavoriteId(props.movie.id));
       Swal.fire({
         toast: true,
         icon: 'success',
