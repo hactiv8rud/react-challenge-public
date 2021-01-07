@@ -35,7 +35,7 @@ function Favorite() {
       <h1 className="text-center mt-2">Favorite Page</h1>
       {(filteredFavoriteError) && (<Error error={filteredFavoriteError} />)}
       {(!favoriteIds.length) && (<NoItem text={"No favorites"} />)}
-      {(favoriteIds.length && !filteredFavorites.length && !filteredFavoriteError) && <NoItem text={"No results"} />}
+      {(favoriteIds.length !== 0 && !filteredFavorites.length && !filteredFavoriteError) && <NoItem text={"No results"} />}
       {filteredFavorites && (
           <div className="layout-center row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4  g-4 ml-2 mr-2">
             {
