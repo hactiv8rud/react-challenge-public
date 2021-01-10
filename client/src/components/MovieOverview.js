@@ -1,21 +1,16 @@
 import React from 'react';
-import Spinner from '../components/Spinner';
 
 function MovieOverview(props) {
 
-  if(Object.keys(props.movie).length && props.movie.constructor === Object) {
-    return (
-    <>
-      <div className="card border-dark bg-dark">
-        <div className="card-body text-light">
-          {props.movie.overview}
-        </div>
+  return (
+  <>
+    <div className="card border-dark bg-dark">
+      <div className="card-body text-light">
+        {props.movie.overview}
       </div>
-    </>
-    );
-  } else {
-    return <Spinner />
-  }
+    </div>
+  </>
+  );
 }
 
 export default MovieOverview;

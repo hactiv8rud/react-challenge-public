@@ -1,93 +1,85 @@
-export function addFavoriteId(favoriteId) {
-  return {
-    type: "favorites/addFavoriteId",
-    favoriteId
-  }
-}
+import Swal from 'sweetalert2';
 
-export function deleteFavoriteId(favoriteId) {
-  return {
-    type: "favorites/deleteFavoriteId",
-    favoriteId
-  }
-}
-
-export const fetchFilteredFavorites = (url) => {
+export const addFavorite = (favorite) => {
   return (dispatch, getState) => {
-    const { favoriteIds } = getState().favoriteReducer;
-    const { searchKey } = getState().navbarReducer;
-    fetch(url)
-      .then(handleResponse)
-      .then((data) => {
-        if (searchKey !== '') {
-          const filtered = data.results.filter((movie) => {
-            return (favoriteIds.includes(movie.id) && movie.title.toLowerCase().includes(searchKey.toLowerCase()))
-          });
-          dispatch({
-            type: "favorites/setFilteredFavorites",
-            filteredFavorites: filtered
-          })
-        } else {
-          const filtered = data.results.filter((movie) => {
-            return (favoriteIds.includes(movie.id))
-          });
-          dispatch({
-            type: "favorites/setFilteredFavorites",
-            filteredFavorites: filtered
-          })
+    const { favorites } = getState().favoriteReducer
+    if (!favorites.some(element => element.id === favorite.id)) {
+      dispatch({
+        type: "favorites/addFavorite",
+        favorite
+      })
+      Swal.fire({
+        toast: true,
+        icon: 'success',
+        title: 'Added to favorites',
+        animation: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
       })
-      .catch((error) => {
-        dispatch({
-          type: "favorites/setFilteredFavoriteError",
-          filteredFavoriteError: error
-        })
-      })
-      .finally(_ => {
-        dispatch({
-          type: "favorites/setFilteredFavoriteIsLoaded",
-          filteredFavoriteIsLoaded: true
-        })
-      })
-  }
-
-  function handleResponse (response) {
-    let contentType = response.headers.get('content-type')
-    if (contentType.includes('application/json')) {
-      return handleJSONResponse(response)
-    } else if (contentType.includes('text/html')) {
-      return handleTextResponse(response)
     } else {
-      throw new Error(`Sorry, content-type ${contentType} not supported`)
+      Swal.fire({
+        toast: true,
+        icon: 'error',
+        title: 'The movie has already been in favorites',
+        animation: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
     }
   }
-  
-  function handleJSONResponse (response) {
-    return response.json()
-      .then(json => {
-        if (response.ok) {
-          return json
-        } else {
-          return Promise.reject(Object.assign({}, json, {
-            status: response.status,
-            statusText: response.statusText
-          }))
-        }
-      })
-  }
+}
 
-  function handleTextResponse (response) {
-    return response.text()
-      .then(text => {
-        if (response.ok) {
-          return text
-        } else {
-          return Promise.reject({
-            status: response.status,
-            statusText: response.statusText,
-            err: text
-          })
+export const deleteFavorite = (FavoriteId) => {
+  return (dispatch, getState) => {
+    const { favorites } = getState().favoriteReducer
+    console.log(favorites)
+    const favoriteIndex = favorites.findIndex((e) => e.id === FavoriteId);
+    if (favoriteIndex >= 0) {
+      dispatch({
+        type: "favorites/deleteFavorite",
+        favoriteIndex
+      })
+      Swal.fire({
+        toast: true,
+        icon: 'success',
+        title: 'Removed from favorites',
+        animation: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
       })
+    } else {
+      Swal.fire({
+        toast: true,
+        icon: 'error',
+        title: 'The movie is not in favorites',
+        animation: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+    }
   }
 }

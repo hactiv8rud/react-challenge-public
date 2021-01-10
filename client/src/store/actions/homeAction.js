@@ -1,5 +1,14 @@
+export const resetMoviesIsLoaded = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "home/setMoviesIsLoaded",
+      moviesIsLoaded: false
+    })
+  }
+}
+
 export const fetchMovies = (url) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     fetch(url)
       .then(handleResponse)
       .then((data) => {
@@ -10,14 +19,14 @@ export const fetchMovies = (url) => {
       })
       .catch((error) => {
         dispatch({
-          type: "home/setMovieError",
-          movieError: error
+          type: "home/setMoviesError",
+          moviesError: error
         })
       })
       .finally(_ => {
         dispatch({
-          type: "home/setMovieIsLoaded",
-          movieIsLoaded: true
+          type: "home/setMoviesIsLoaded",
+          moviesIsLoaded: true
         })
       })
   }

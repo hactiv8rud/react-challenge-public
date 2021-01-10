@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { fetchMovies } from '../store/actions/homeAction';
+import { resetMoviesIsLoaded } from '../store/actions/homeAction';
 import { setPath } from '../store/actions/pathAction';
 import MovieCard from '../components/MovieCard';
 import Spinner from '../components/Spinner';
@@ -14,7 +15,7 @@ function Home() {
   const [currentPage] = useState(1);
   const searchKey = useSelector(state => state.navbarReducer.searchKey);
   const movies = useSelector(state => state.homeReducer.movies);
-  const movieIsLoaded = useSelector(state => state.homeReducer.movieIsLoaded);
+  const moviesIsLoaded = useSelector(state => state.homeReducer.moviesIsLoaded);
   const movieError = useSelector(state => state.homeReducer.movieError);
   let url = '';
   if (searchKey === '') {
@@ -24,14 +25,18 @@ function Home() {
   }
 
   useEffect(() => {
-    dispatch(fetchMovies(url));
-  },[searchKey])
+    dispatch(setPath(path));
+  },[dispatch, path])
 
   useEffect(() => {
-    dispatch(setPath(path));
-  },[])
+    dispatch(fetchMovies(url));
+  },[searchKey, url, dispatch])
 
-  if (!movieIsLoaded) {
+  useEffect(() => {
+    return dispatch(resetMoviesIsLoaded());
+  },[dispatch])
+
+  if (!moviesIsLoaded) {
     return <Spinner />
   }
   

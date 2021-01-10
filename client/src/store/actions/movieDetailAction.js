@@ -1,3 +1,12 @@
+export const resetMovieDetailIsLoaded = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "movieDetail/setMovieDetailIsLoaded",
+      movieDetailIsLoaded: false
+    })
+  }
+}
+
 export const fetchMovieDetail = (url) => {
   return (dispatch) => {
     fetch(url)

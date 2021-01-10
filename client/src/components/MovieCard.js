@@ -1,53 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { addFavoriteId, deleteFavoriteId } from '../store/actions/favoriteAction';
-import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorite, deleteFavorite } from '../store/actions/favoriteAction';
 
 function MovieCard(props) {
-  const [image_url] = useState(`http://image.tmdb.org/t/p/w342${props.movie.poster_path}`);
+  const [imageUrl] = useState(`http://image.tmdb.org/t/p/w342${props.movie.poster_path}`);
   const [MovieId] = useState(props.movie.id);
-  const favoriteIds = useSelector(state => state.favoriteReducer.favoriteIds);
+  const favorites = useSelector(state => state.favoriteReducer.favorites);
   const dispatch = useDispatch()
 
-  function deleteFavorite() {
-    const targetIndex = favoriteIds.indexOf(props.movie.id);
-    dispatch(deleteFavoriteId(targetIndex));
-    Swal.fire({
-      toast: true,
-      icon: 'success',
-      title: 'Removed from your favorites',
-      animation: true,
-      position: 'top',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: false,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-      }
-    })
+  function deleteFavoriteMovie() {
+    dispatch(deleteFavorite(props.movie.id));
   }
 
-  function addFavorite() {
-    if (!favoriteIds.includes(props.movie.id)) {
-      dispatch(addFavoriteId(props.movie.id));
-      Swal.fire({
-        toast: true,
-        icon: 'success',
-        title: 'Added to your favorites',
-        animation: true,
-        position: 'top',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: false,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      })
+  function addFavoriteMovie() {
+    const newFavorite = {
+      id: props.movie.id,
+      original_title: props.movie.original_title,
+      poster_path: props.movie.poster_path
     }
-  }
+    dispatch(addFavorite(newFavorite));
+  } 
+
+  useEffect(() => {
+    console.log(favorites);
+  },[favorites])
+
 
   return (
     <>
@@ -56,17 +34,17 @@ function MovieCard(props) {
             <Link className="home-movie-detail-link" to={`/details/${MovieId}`}>  
               {
                 (props.movie.poster_path) ? (
-                  <img src={image_url} className="card-img-top" alt={props.movie.original_title} />
+                  <img src={imageUrl} className="card-img-top" alt={props.movie.original_title} />
                 ) : (
                   <img src="/images/no-image.svg" className="card-img-top" alt={props.movie.original_title} />
                 )
               }
              </Link>
             {
-              (favoriteIds.includes(props.movie.id)) ? (
-                <img onClick={deleteFavorite} src="/images/star.svg" className="wishlist-icon" />
+              (favorites.some(element => element.id === props.movie.id)) ? (
+                <img onClick={deleteFavoriteMovie} src="/images/star.svg" className="wishlist-icon" alt="red-color-star" />
               ) : (
-                <img onClick={addFavorite} src="/images/empty-star.svg" className="wishlist-icon" />
+                <img onClick={addFavoriteMovie} src="/images/empty-star.svg" className="wishlist-icon" alt="empty-star" />
               )
             }
             <div className="card-body d-flex flex-column text-center home-movie-title-container">
@@ -77,6 +55,7 @@ function MovieCard(props) {
         </div>
     </>
   );
+
 }
 
 export default MovieCard;

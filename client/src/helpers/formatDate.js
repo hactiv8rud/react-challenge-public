@@ -1,5 +1,5 @@
 function formatDate(releasedDate) {
-  let months = new Array();
+  let months = [];
       months[1] = "January";
       months[2] = "February";
       months[3] = "March";

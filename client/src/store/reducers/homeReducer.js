@@ -1,17 +1,17 @@
 const initialState = {
   movies: [],
-  movieIsLoaded: false,
-  movieError: null
+  moviesIsLoaded: false,
+  moviesError: null
 }
 
 function homeReducer( state = initialState, action ) {
   switch(action.type) {
     case 'home/setMovies':
       return { ...state, movies: action.movies }
-    case 'home/setMovieIsLoaded':
-      return { ...state, movieIsLoaded: action.movieIsLoaded }
-    case 'home/setMovieError':
-      return { ...state, movieError: action.movieError }
+    case 'home/setMoviesIsLoaded':
+      return { ...state, moviesIsLoaded: action.moviesIsLoaded }
+    case 'home/setMoviesError':
+      return { ...state, moviesError: action.moviesError }
     default:
       return state
   }
